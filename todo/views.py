@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Item
 from .forms import ItemForm # This imports our form we created 
 
@@ -14,15 +14,22 @@ def get_todo_list(request):
 
 
 def add_item(request):
-    if request.method == 'POST':  # This starts a post request
+    if request.method == 'POST':                # This starts a post request
         form = ItemForm(request.POST)
-        name = request.POST.get('item_name') # We get the information from the form that comes in with this template. 
-        done = 'done' in request.POST
-        Item.objects.create(name=name, done=done)
-
-        return redirect('get_todo_list') # Back to the get_todo_list url name 
-    form = ItemForm() # We creating an instance of the form
+        if form.is_valid():
+            form.save()
+            return redirect('get_todo_list')    # Back to the get_todo_list url name 
+    form = ItemForm()                           # We creating an instance of the form
     context = {
         'form': form
     }
     return render(request, 'todo/add_item.html', context) # this one is if it's a get request.
+
+
+def edit_item(request, item_id):
+    item = get_object_or_404(Item, id=item_id)
+    form = ItemForm(instance=item)
+    context = {
+        'form': form
+    }
+    return render(request, 'todo/edit_item.html', context)

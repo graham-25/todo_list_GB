@@ -7,15 +7,15 @@
     <title>to_do_list</title>
 </head>
 <body>
-    <h1>Add a Todo Item</h1>
+    <h1>Edit a Todo Item</h1>
     <p>This is my page where I'm going to show you my list</p>
     
-    <form method="POST" action="add">
+    <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <div>
             <p>
-                <button type="submit">Add Item</button>
+                <button type="submit">Update Item</button>
             </p>
         </div>
     </form>
